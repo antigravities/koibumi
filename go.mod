@@ -1,4 +1,4 @@
-module get.cutie.cafe/tweety
+module get.cutie.cafe/koibumi
 
 go 1.14
 
