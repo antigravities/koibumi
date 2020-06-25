@@ -52,9 +52,11 @@
                                 <img data-appid="${suggestion.appid}" width="100%" src="${suggestion.capsule}?t=${Date.now()}"></img>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">${DOMPurify.sanitize(suggestion.name)} (${suggestion.release_year})</h5>
-                                <p class="card-text">
+                                <h5 class="card-title">
+                                    ${DOMPurify.sanitize(suggestion.name)} (${suggestion.release_year})<br>
                                     <small class="text-muted">${DOMPurify.sanitize(suggestion.developer == suggestion.publisher ? suggestion.developer : suggestion.developer + "; " + suggestion.publisher)}</small><br><br>
+                                </h5>
+                                <p class="card-text">
                                     ${suggestion.tags.map(i => "<a class='badge badge-info' class='tag' href='#tag=" + DOMPurify.sanitize(i) + "'>" + DOMPurify.sanitize(i) + "</a>").join(" ")}<br>
 
                                     ${DOMPurify.sanitize(suggestion.snippet)}
