@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- Shamelessly stolen from Bootstrap's album template -->
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>
@@ -52,6 +54,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">${DOMPurify.sanitize(suggestion.name)} (${suggestion.release_year})</h5>
                                 <p class="card-text">
+                                    <small class="text-muted">${DOMPurify.sanitize(suggestion.developer == suggestion.publisher ? suggestion.developer : suggestion.developer + "; " + suggestion.publisher)}</small><br><br>
                                     ${suggestion.tags.map(i => "<a class='badge badge-info' class='tag' href='#tag=" + DOMPurify.sanitize(i) + "'>" + DOMPurify.sanitize(i) + "</a>").join(" ")}<br>
 
                                     ${DOMPurify.sanitize(suggestion.snippet)}
