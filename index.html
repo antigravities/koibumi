@@ -105,8 +105,7 @@
                         menu: "dropdown-menu",
                         suggestion: "dropdown-item",
                         hint: "display-none"
-                    },
-                    limit: 10
+                    }
                 }, {
                     name: "apps",
                     display: (v) => v.name + " (" + v.appid + ")",
@@ -117,7 +116,8 @@
                             url: '/api/search?q=%QUERY',
                             wildcard: '%QUERY'
                         }
-                    })
+                    }),
+                    limit: 10
                 });
    
                 $("#submit").on("click", () => {
