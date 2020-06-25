@@ -130,7 +130,7 @@
                     fetch("/api/submit", {
                         method: "POST",
                         body: JSON.stringify({
-                            appid: isNaN(parseInt($("#appsearch").val())) ? /\((\d*)\)$/.exec($("#appsearch").val())[1] : parseInt($("#appsearch").val()),
+                            appid: isNaN(parseInt($("#appsearch").val())) ? /\((\d*)\)$/.exec($("#appsearch").val())[1] : ("" + parseInt($("#appsearch").val())),
                             recaptcha: grecaptcha.getResponse()
                         }),
                         headers: {
