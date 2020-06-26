@@ -86,7 +86,7 @@
                     e => {
                         if( mtIsShowing || e.currentTarget.getAttribute("data-video") == "" ) return;
                         mtIsShowing = true;
-                        e.currentTarget.innerHTML = "<video autoplay loop muted style='width: 100%'><source src='" + e.currentTarget.getAttribute("data-video") + "'></video>";
+                        e.currentTarget.innerHTML = "<video autoplay loop muted style='width: 100%'><source src='" + e.currentTarget.getAttribute("data-video").replace("http", "https") + "'></video>";
                     },
                     e => {
                         if( ! mtIsShowing ) return;
