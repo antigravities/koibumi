@@ -52,7 +52,8 @@
 
                     html += `
                     <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
+                        <div class="card mb-4 shadow-sm ${suggestion.tags.indexOf("Early Access") > -1 ? "early-access": ""}">
+                            <img class="ea-ribbon" src="https://s3.cutie.cafe/recommendations/early_access.png" style="top: 0; left: 0; position: absolute; width: 40%; display: ${suggestion.tags.indexOf("Early Access") > -1 ? "block" : "none"}">
                             <div class="card-img-top minitrailer" data-video="${suggestion.video}" data-capsule="${suggestion.capsule}" width="100%">
                                 <img data-appid="${appid}" width="100%" src="${suggestion.capsule}?t=${Date.now()}"></img>
                             </div>
@@ -62,7 +63,7 @@
                                     <small class="text-muted">${DOMPurify.sanitize(suggestion.developer == suggestion.publisher ? suggestion.developer : suggestion.developer + "; " + suggestion.publisher)}</small>
                                 </h5>
                                 <p class="card-text">
-                                    ${suggestion.tags.map(i => "<a class='badge badge-info' class='tag' href='#tag=" + DOMPurify.sanitize(i) + "'>" + DOMPurify.sanitize(i) + "</a>").join(" ")}<br>
+                                    ${suggestion.tags.filter(i => i != "Early Access").map(i => "<a class='badge badge-info' class='tag' href='#tag=" + DOMPurify.sanitize(i) + "'>" + DOMPurify.sanitize(i) + "</a>").join(" ")}<br>
 
                                     ${DOMPurify.sanitize(suggestion.snippet)}
                                 </p>
@@ -87,11 +88,14 @@
                         if( mtIsShowing || e.currentTarget.getAttribute("data-video") == "" ) return;
                         mtIsShowing = true;
                         e.currentTarget.innerHTML = "<video autoplay loop muted style='width: 100%'><source src='" + e.currentTarget.getAttribute("data-video").replace("http", "https") + "'></video>";
+                        $(e.currentTarget.parentElement).find(".ea-ribbon").css("display", "none");
                     },
                     e => {
                         if( ! mtIsShowing ) return;
                         mtIsShowing = false;
                         e.currentTarget.innerHTML = "<img src='" + e.currentTarget.getAttribute("data-capsule") + "' width='100%'>";
+                        console.log(e.currentTarget.parentElement.getAttribute("class").indexOf("early-access"));
+                        $(e.currentTarget.parentElement).find(".ea-ribbon").css("display", e.currentTarget.parentElement.getAttribute("class").indexOf("early-access") > -1 ? "block": "none");
                     }
                 );
             }
