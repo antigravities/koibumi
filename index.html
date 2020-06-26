@@ -37,6 +37,9 @@
             let tags = [];
 
             function refresh(items){
+                $(".minitrailer").off("mouseover");
+                $(".minitrailer").off("mouseout");
+
                 let html = "";
 
                 if( items.length == 0 ){
@@ -45,11 +48,13 @@
                 }
 
                 for( let suggestion of items ){
+                    let appid = parseInt(suggestion.store.split("/")[4]);
+
                     html += `
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
-                            <div class="card-img-top minitrailer" data-appid="${suggestion.appid}" width="100%">
-                                <img data-appid="${suggestion.appid}" width="100%" src="${suggestion.capsule}?t=${Date.now()}"></img>
+                            <div class="card-img-top minitrailer" data-video="${suggestion.video}" data-capsule="${suggestion.capsule}" width="100%">
+                                <img data-appid="${appid}" width="100%" src="${suggestion.capsule}?t=${Date.now()}"></img>
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">
@@ -74,6 +79,21 @@
                 }
 
                 document.querySelector("#recs").innerHTML = html;
+
+                let mtIsShowing = false;
+
+                $(".minitrailer").hover(
+                    e => {
+                        if( mtIsShowing || e.currentTarget.getAttribute("data-video") == "" ) return;
+                        mtIsShowing = true;
+                        e.currentTarget.innerHTML = "<video autoplay loop muted style='width: 100%'><source src='" + e.currentTarget.getAttribute("data-video") + "'></video>";
+                    },
+                    e => {
+                        if( ! mtIsShowing ) return;
+                        mtIsShowing = false;
+                        e.currentTarget.innerHTML = "<img src='" + e.currentTarget.getAttribute("data-capsule") + "' width='100%'>";
+                    }
+                );
             }
 
             function parseHash(){
@@ -186,6 +206,8 @@
 
                     window.location.hash = fHash;
                 });
+
+
             });
 
             window.addEventListener("hashchange", parseHash);

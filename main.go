@@ -71,6 +71,7 @@ type showcase struct {
 	Publisher   string   `json:"publisher"`
 	ReleaseYear string   `json:"release_year"`
 	Platforms   string   `json:"platforms"`
+	Video       string   `json:"video"`
 }
 
 type storefrontAPI struct {
@@ -100,6 +101,11 @@ type storefrontAPI struct {
 			Mac     bool `json:"mac"`
 			Linux   bool `json:"linux"`
 		} `json:"platforms"`
+		Movies []struct {
+			MP4 struct {
+				Max string `json:"max"`
+			} `json:"mp4"`
+		} `json:"movies"`
 	} `json:"data"`
 }
 
@@ -136,16 +142,20 @@ func fetchSteamApps() (*_ISteamAppsJSON, error) {
 	return apps, nil
 }
 
-func commitShowcases() error {
-	ibytes, err := json.Marshal(showcases)
+func commit(item interface{}, file string) error {
+	ibytes, err := json.Marshal(item)
 
 	if err != nil {
 		return err
 	}
 
-	ioutil.WriteFile("suggestions.json", ibytes, 0660)
+	ioutil.WriteFile(file, ibytes, 0660)
 
 	return nil
+}
+
+func commitShowcases() error {
+	return commit(showcases, "showcases.json")
 }
 
 func main() {
@@ -158,7 +168,6 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("Could not fetch apps: %v", err))
 	}
-
 	applist := make(map[string]game)
 
 	for _, val := range apps.AppList.Apps {
@@ -372,6 +381,11 @@ func main() {
 			pub = storefront.Data.Publishers[0]
 		}
 
+		video := ""
+		if len(storefront.Data.Movies) > 0 {
+			video = storefront.Data.Movies[0].MP4.Max
+		}
+
 		sc := showcase{
 			"https://store.steampowered.com/app/" + qs.AppID,
 			"https://steamcdn-a.akamaihd.net/steam/apps/" + qs.AppID + "/header.jpg",
@@ -383,7 +397,8 @@ func main() {
 			dev,
 			pub,
 			year,
-			platforms}
+			platforms,
+			video}
 
 		showcases = append(showcases, sc)
 		commitShowcases()
