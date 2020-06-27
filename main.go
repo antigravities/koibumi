@@ -155,7 +155,7 @@ func commit(item interface{}, file string) error {
 }
 
 func commitShowcases() error {
-	return commit(showcases, "showcases.json")
+	return commit(showcases, "suggestions.json")
 }
 
 func main() {
